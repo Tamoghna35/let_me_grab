@@ -5,55 +5,64 @@ import ProductTableHeader from "../ProductTableComponents/ProductTableHeader";
 import ProductTableRow from "../ProductTableComponents/ProductTableRow";
 import ProductViewModal from "../ProductTableComponents/ProductViewModal";
 import ProductUpdateModal from "../ProductTableComponents/ProductUpdateModal";
+import { useSelector } from "react-redux";
+import useProduct from "../../customhooks/useProduct";
 
 const ProductTable = () => {
-  const [products, setProducts] = useState([]);
+  // const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [filterCategory, setFilterCategory] = useState("");
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [updateProduct, setUpdateProduct] = useState(null);
-  const [categories, setCategories] = useState([]);
+  // const [categories, setCategories] = useState([]);
   const [sortOrder, setSortOrder] = useState("asc");
   const [limit, setLimit] = useState(5); // State for limit
 
-  const isLoggedIn = localStorage.getItem("users");
+  // const isLoggedIn = localStorage.getItem("users");
+  const isLoggedIn = useSelector((state) => state.user.loggedInUser);
 
-  useEffect(() => {
-    const fetchProductsAndCategories = async () => {
-      try {
-        let productsData;
+  // useEffect(() => {
+  //   const fetchProductsAndCategories = async () => {
+  //     try {
+  //       let productsData;
 
-        if (filterCategory) {
-          // Fetch products by category
-          const response = await fetch(
-            `https://fakestoreapi.com/products/category/${filterCategory}`
-          );
-          productsData = await response.json();
-        } else if (limit) {
-          const response = await fetch(
-            `https://fakestoreapi.com/products?limit=${limit}`
-          );
-          productsData = await response.json();
-        } else {
-          // Fetch all products if no category is selected
-          const response = await fetch("https://fakestoreapi.com/products");
-          productsData = await response.json();
-        }
+  //       if (filterCategory) {
+  //         // Fetch products by category
+  //         const response = await fetch(
+  //           `https://fakestoreapi.com/products/category/${filterCategory}`
+  //         );
+  //         productsData = await response.json();
+  //       } else if (limit) {
+  //         const response = await fetch(
+  //           `https://fakestoreapi.com/products?limit=${limit}`
+  //         );
+  //         productsData = await response.json();
+  //       } else {
+  //         // Fetch all products if no category is selected
+  //         const response = await fetch("https://fakestoreapi.com/products");
+  //         productsData = await response.json();
+  //       }
 
-        const categoryResponse = await fetch(
-          "https://fakestoreapi.com/products/categories"
-        );
-        const categoriesData = await categoryResponse.json();
+  //       const categoryResponse = await fetch(
+  //         "https://fakestoreapi.com/products/categories"
+  //       );
+  //       const categoriesData = await categoryResponse.json();
 
-        setProducts(productsData); // Update products based on category
-        setCategories(categoriesData); // Update categories
-      } catch (error) {
-        console.error("Failed to fetch products or categories:", error);
-      }
-    };
+  //       setProducts(productsData); // Update products based on category
+  //       setCategories(categoriesData); // Update categories
+  //     } catch (error) {
+  //       console.error("Failed to fetch products or categories:", error);
+  //     }
+  //   };
 
-    fetchProductsAndCategories();
-  }, [filterCategory, limit]); // Trigger when filterCategory changes
+  //   fetchProductsAndCategories();
+  // }, [filterCategory, limit]); // Trigger when filterCategory changes
+
+  const { products, categories, setProducts } = useProduct(
+    filterCategory,
+    limit,
+    sortOrder
+  );
 
   const handleView = async (productId) => {
     try {

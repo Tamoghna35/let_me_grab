@@ -4,14 +4,20 @@ import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { Logo } from "../../assets";
 import { UserContext } from "../../context/UserContext";
+import { setUser, clearUser } from "../../store/userSlice";
+
+import { useSelector, useDispatch } from "react-redux";
 
 const Navbar = () => {
-  const { loggedInUser, setLoggedInUser } = useContext(UserContext);
+  // const { loggedInUser, setLoggedInUser } = useContext(UserContext);
+  const loggedInUser = useSelector((state) => state.user.loggedInUser);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.removeItem("loggedInUser"); // Clear logged-in user
-    setLoggedInUser(null);
+    // localStorage.removeItem("loggedInUser"); // Clear logged-in user
+    // setLoggedInUser(null);
+    dispatch(clearUser()); // Clear logged-in user from Redux store
     navigate("/login"); // Redirect to login page
   };
 

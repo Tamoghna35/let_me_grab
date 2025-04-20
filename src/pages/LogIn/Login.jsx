@@ -4,13 +4,16 @@ import React, { use, useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { UserContext } from "../../context/UserContext";
 import Popup from "../../components/Popup/Popup";
+import { useDispatch } from "react-redux";
+import { setUser } from "../../store/userSlice";
 
 const Login = () => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [message, setMessage] = useState("");
   const [showPopup, setShowPopup] = useState(false);
-  const { setLoggedInUser } = useContext(UserContext);
+  // const { setLoggedInUser } = useContext(UserContext);
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogin = (e) => {
@@ -32,7 +35,8 @@ const Login = () => {
 
     if (user) {
       setMessage("Login successful!");
-      setLoggedInUser(user);
+      // setLoggedInUser(user);
+      dispatch(setUser(user)); // Set logged-in user in Redux store
       navigate("/products"); // Redirect to products page
     } else {
       setMessage("Invalid username or password");
